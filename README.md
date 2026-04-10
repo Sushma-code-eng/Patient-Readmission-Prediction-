@@ -1,5 +1,9 @@
 # 🏥 Patient 30-Day Readmission Prediction
 
+![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)
+
 End-to-end classification project predicting hospital readmissions within 30 days of discharge, with class imbalance handling (SMOTE), risk stratification, and SHAP explainability.
 
 ## 📌 Project Overview
@@ -42,15 +46,56 @@ End-to-end classification project predicting hospital readmissions within 30 day
 | High | 74 | 39.2% |
 | Very High | 18 | 44.4% |
 
+## ⚡ Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Sushma-code-eng/Patient-Readmission-Prediction-.git
+cd Patient-Readmission-Prediction-
+
+# 2. Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate        # On Windows: venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+```
+
+## 🚀 How to Run
+
+```bash
+# Generate the synthetic dataset
+python data/generate_data.py
+
+# Run the full ML pipeline
+python notebooks/full_analysis.py
+```
+
+Output visualizations are saved to `visualizations/`, trained models to `models/`, and the summary report to `reports/model_summary.json`.
+
+## 📊 Visualizations
+
+**Model Comparison across all 5 algorithms:**
+
+![Model Comparison](visualizations/07_model_comparison.png)
+
+**SHAP Feature Importance — top drivers of readmission:**
+
+![SHAP Summary](visualizations/09_shap_summary.png)
+
+**Risk Stratification — patient tiers by predicted probability:**
+
+![Risk Stratification](visualizations/11_risk_stratification.png)
+
 ## 📁 Project Structure
 
 ```
-patient-readmission-prediction/
+Patient-Readmission-Prediction-/
 ├── data/
-│   ├── patient_readmission.csv
-│   └── generate_data.py
+│   ├── patient_readmission.csv      # Synthetic dataset (3,000 records)
+│   └── generate_data.py             # Data generation script
 ├── notebooks/
-│   └── full_analysis.py
+│   └── full_analysis.py             # End-to-end ML pipeline
 ├── visualizations/
 │   ├── 01_target_distribution.png
 │   ├── 02_age_analysis.png
@@ -64,19 +109,15 @@ patient-readmission-prediction/
 │   ├── 10_shap_bar.png
 │   └── 11_risk_stratification.png
 ├── models/
-│   ├── best_xgb_classifier.pkl
-│   └── scaler.pkl
+│   ├── best_xgb_classifier.pkl      # Saved best model
+│   └── scaler.pkl                   # Fitted StandardScaler
 ├── reports/
-│   └── model_summary.json
-└── README.md
-```
-
-## 🚀 How to Run
-
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost shap imbalanced-learn
-python data/generate_data.py
-python notebooks/full_analysis.py
+│   └── model_summary.json           # Model metrics report
+├── .gitignore
+├── CONTRIBUTING.md
+├── LICENSE
+├── README.md
+└── requirements.txt
 ```
 
 ## 💡 Key Techniques Demonstrated
@@ -97,3 +138,20 @@ python notebooks/full_analysis.py
 ## 🛠 Tech Stack
 
 Python | Pandas | Scikit-learn | XGBoost | SHAP | imbalanced-learn | Seaborn | Matplotlib
+
+## 🔭 Future Work
+
+- [ ] Hyperparameter tuning with Optuna or GridSearchCV
+- [ ] Deploy model as a REST API using FastAPI or Flask
+- [ ] Build an interactive dashboard with Streamlit
+- [ ] Experiment with deep learning models (LSTM, TabNet)
+- [ ] Integrate real-world EHR data (e.g., MIMIC-III dataset)
+- [ ] Add fairness/bias analysis across demographic groups
+
+## 📜 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+## 👩‍💻 Author
+
+**Sushma** — [@Sushma-code-eng](https://github.com/Sushma-code-eng)
