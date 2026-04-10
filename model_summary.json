@@ -1,0 +1,55 @@
+{
+  "project": "Patient 30-Day Readmission Prediction",
+  "best_model": "Logistic Regression",
+  "metrics": {
+    "accuracy": 0.6483,
+    "precision": 0.4621,
+    "recall": 0.335,
+    "f1_score": 0.3884,
+    "auc_roc": 0.5821
+  },
+  "class_imbalance_handling": "SMOTE",
+  "features_engineered": 10,
+  "top_risk_factors": [
+    {
+      "feature": "total_visits",
+      "importance": 0.09578770399093628
+    },
+    {
+      "feature": "high_med_count",
+      "importance": 0.07217284291982651
+    },
+    {
+      "feature": "num_inpatient_visits",
+      "importance": 0.04840501397848129
+    },
+    {
+      "feature": "diabetic_medication",
+      "importance": 0.04681016132235527
+    },
+    {
+      "feature": "num_emergency_visits",
+      "importance": 0.04668620973825455
+    },
+    {
+      "feature": "a1c_result",
+      "importance": 0.04652094095945358
+    },
+    {
+      "feature": "is_elderly",
+      "importance": 0.03941510245203972
+    },
+    {
+      "feature": "num_outpatient_visits",
+      "importance": 0.038130950182676315
+    },
+    {
+      "feature": "visit_intensity",
+      "importance": 0.0350765585899353
+    },
+    {
+      "feature": "glucose_serum_test",
+      "importance": 0.033251792192459106
+    }
+  ]
+}
