@@ -1,5 +1,9 @@
 # 🏥 Patient 30-Day Readmission Prediction
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen)
+
 End-to-end classification project predicting hospital readmissions within 30 days of discharge, with class imbalance handling (SMOTE), risk stratification, and SHAP explainability.
 
 ## 📌 Project Overview
@@ -68,14 +72,44 @@ patient-readmission-prediction/
 │   └── scaler.pkl
 ├── reports/
 │   └── model_summary.json
+├── requirements.txt
+├── .gitignore
+├── LICENSE
+├── CONTRIBUTING.md
 └── README.md
+```
+
+## ⚡ Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Sushma-code-eng/Patient-Readmission-Prediction-.git
+cd Patient-Readmission-Prediction-
+
+# 2. Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate      # On Windows: venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Generate the dataset
+python data/generate_data.py
+
+# 5. Run the full analysis pipeline
+python notebooks/full_analysis.py
 ```
 
 ## 🚀 How to Run
 
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost shap imbalanced-learn
+# Install dependencies
+pip install -r requirements.txt
+
+# Generate dataset
 python data/generate_data.py
+
+# Run full ML pipeline
 python notebooks/full_analysis.py
 ```
 
@@ -97,3 +131,28 @@ python notebooks/full_analysis.py
 ## 🛠 Tech Stack
 
 Python | Pandas | Scikit-learn | XGBoost | SHAP | imbalanced-learn | Seaborn | Matplotlib
+
+## 📊 Visualizations
+
+### SHAP Feature Importance
+![SHAP Summary](visualizations/09_shap_summary.png)
+
+### Model Comparison
+![Model Comparison](visualizations/07_model_comparison.png)
+
+### Risk Stratification
+![Risk Stratification](visualizations/11_risk_stratification.png)
+
+## 🔮 Future Work
+
+- **Deploy as a web app** — Wrap the model in a Flask or FastAPI service so clinicians can get real-time readmission risk scores at discharge.
+- **Explore deep learning** — Experiment with LSTM or Transformer-based models on sequential patient visit data for improved accuracy.
+- **Integrate with EHR systems** — Connect the pipeline to HL7 FHIR-compatible Electronic Health Record APIs for automated, continuous prediction.
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## 👩‍💻 Author
+
+**Sushma** — [GitHub Profile](https://github.com/Sushma-code-eng)
