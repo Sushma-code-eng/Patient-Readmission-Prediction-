@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from pathlib import Path
 
 np.random.seed(42)
 n = 3000
@@ -57,6 +58,7 @@ df = pd.DataFrame({
     'discharge_disposition': discharge, 'readmitted_30_days': readmitted
 })
 
-df.to_csv('/home/claude/patient-readmission-prediction/data/patient_readmission.csv', index=False)
+output_dir = Path(__file__).resolve().parent  # data/ directory
+df.to_csv(output_dir / 'patient_readmission.csv', index=False)
 print(f"Dataset: {df.shape}")
 print(f"Readmission rate: {readmitted.mean():.1%} ({readmitted.sum()} / {n})")
