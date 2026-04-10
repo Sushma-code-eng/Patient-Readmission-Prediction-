@@ -1,4 +1,7 @@
 
+import os
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -25,14 +28,17 @@ sns.set_theme(style="whitegrid", palette="husl", font_scale=1.1)
 plt.rcParams["figure.figsize"] = (12, 6)
 plt.rcParams["figure.dpi"] = 150
 
-PROJ = "/home/claude/patient-readmission-prediction"
-VIZ = PROJ + "/visualizations"
+PROJ = Path(__file__).resolve().parent.parent  # project root (one level up from notebooks/)
+VIZ = PROJ / "visualizations"
+VIZ.mkdir(parents=True, exist_ok=True)
+(PROJ / "models").mkdir(parents=True, exist_ok=True)
+(PROJ / "reports").mkdir(parents=True, exist_ok=True)
 
 print("=" * 70)
 print("  PATIENT READMISSION PREDICTION PIPELINE")
 print("=" * 70)
 
-df = pd.read_csv(PROJ + "/data/patient_readmission.csv")
+df = pd.read_csv(PROJ / "data" / "patient_readmission.csv")
 print("Dataset: {} rows x {} columns".format(df.shape[0], df.shape[1]))
 print("Readmission rate: {:.1f}%".format(df["readmitted"].mean()*100))
 
@@ -46,7 +52,7 @@ axes[0].set_title("Readmission Distribution", fontweight="bold"); axes[0].set_yl
 df["readmitted"].value_counts().plot.bar(ax=axes[1], color=colors, edgecolor="white")
 axes[1].set_title("Readmission Counts", fontweight="bold")
 axes[1].set_xticklabels(["Not Readmitted", "Readmitted"], rotation=0)
-plt.tight_layout(); plt.savefig(VIZ+"/01_target_distribution.png", bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "01_target_distribution.png", bbox_inches="tight"); plt.close()
 print("Saved: 01")
 
 # 2. Age
@@ -61,7 +67,7 @@ age_counts = df.groupby("age_group").size().reindex(age_order)
 axes[1].bar(range(len(age_counts)), age_counts.values, color="#FF9800")
 axes[1].set_xticks(range(len(age_counts))); axes[1].set_xticklabels(age_order, rotation=45, ha="right")
 axes[1].set_title("Patient Count by Age", fontweight="bold")
-plt.tight_layout(); plt.savefig(VIZ+"/02_age_analysis.png", bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "02_age_analysis.png", bbox_inches="tight"); plt.close()
 print("Saved: 02")
 
 # 3. Clinical
@@ -72,7 +78,7 @@ for ax, col, color in zip(axes[0], ["admission_type","discharge_disposition","di
 for ax, col in zip(axes[1], ["time_in_hospital","number_inpatient","number_diagnoses"]):
     sns.boxplot(data=df, x="readmitted", y=col, ax=ax, palette=colors, width=0.5)
     ax.set_title(col, fontweight="bold"); ax.set_xticklabels(["No","Yes"])
-plt.tight_layout(); plt.savefig(VIZ+"/03_clinical_features.png", bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "03_clinical_features.png", bbox_inches="tight"); plt.close()
 print("Saved: 03")
 
 # 4. Medications
@@ -81,7 +87,7 @@ for ax, col, color in zip(axes, ["insulin","A1Cresult","diabetesMed"], ["#00BCD4
     rates = df.groupby(col)["readmitted"].mean().sort_values(ascending=False) * 100
     ax.bar(rates.index, rates.values, color=color); ax.set_title("By "+col, fontweight="bold")
     ax.axhline(y=df["readmitted"].mean()*100, color="red", linestyle="--")
-plt.tight_layout(); plt.savefig(VIZ+"/04_medication_analysis.png", bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "04_medication_analysis.png", bbox_inches="tight"); plt.close()
 print("Saved: 04")
 
 # 5. Correlation
@@ -92,7 +98,7 @@ fig, ax = plt.subplots(figsize=(14, 10))
 corr = df_enc.corr(); mask = np.triu(np.ones_like(corr, dtype=bool))
 sns.heatmap(corr, mask=mask, annot=True, fmt=".2f", cmap="RdBu_r", center=0, square=True, ax=ax, annot_kws={"size":8})
 ax.set_title("Correlation Matrix", fontweight="bold")
-plt.tight_layout(); plt.savefig(VIZ+"/05_correlation_heatmap.png", bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "05_correlation_heatmap.png", bbox_inches="tight"); plt.close()
 print("Saved: 05")
 
 # FEATURE ENGINEERING
@@ -147,8 +153,8 @@ cvs = cross_val_score(bm, X, y, cv=cv, scoring="roc_auc")
 print("CV AUC: {:.4f} +/- {:.4f}".format(cvs.mean(), cvs.std()))
 print("\n" + classification_report(y_test, results[bn]["y_pred"], target_names=["Not Readmitted","Readmitted"]))
 
-pickle.dump(bm, open(PROJ+"/models/best_model.pkl","wb"))
-pickle.dump(scaler, open(PROJ+"/models/scaler.pkl","wb"))
+pickle.dump(bm, open(PROJ / "models" / "best_model.pkl", "wb"))
+pickle.dump(scaler, open(PROJ / "models" / "scaler.pkl", "wb"))
 
 yp_f = results[bn]["y_prob"]; ypd_f = results[bn]["y_pred"]
 
@@ -165,7 +171,7 @@ for i,(name,res) in enumerate(results.items()):
     ap = average_precision_score(y_test,res["y_prob"])
     axes[1].plot(r,p,color=croc[i],lw=2,label="{} ({:.3f})".format(name,ap))
 axes[1].set_title("PR Curves",fontweight="bold"); axes[1].legend(fontsize=9)
-plt.tight_layout(); plt.savefig(VIZ+"/06_roc_pr_curves.png",bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "06_roc_pr_curves.png",bbox_inches="tight"); plt.close()
 print("Saved: 06")
 
 # 7. Confusion Matrix
@@ -176,7 +182,7 @@ axes[0].set_title("Confusion Matrix",fontweight="bold"); axes[0].set_ylabel("Act
 cmn = cm.astype(float)/cm.sum(axis=1)[:,np.newaxis]
 sns.heatmap(cmn, annot=True, fmt=".2%", cmap="Oranges", ax=axes[1], xticklabels=["No","Yes"], yticklabels=["No","Yes"])
 axes[1].set_title("Normalized",fontweight="bold"); axes[1].set_ylabel("Actual"); axes[1].set_xlabel("Predicted")
-plt.tight_layout(); plt.savefig(VIZ+"/07_confusion_matrix.png",bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "07_confusion_matrix.png",bbox_inches="tight"); plt.close()
 print("Saved: 07")
 
 # 8. Model Comparison
@@ -189,7 +195,7 @@ axes[0].set_title("Model Comparison",fontweight="bold"); axes[0].set_ylim(0,1); 
 av = [results[n]["auc"] for n in mn]
 axes[1].barh(mn, av, color=croc); axes[1].set_title("AUC Comparison",fontweight="bold"); axes[1].set_xlim(0.5,1)
 for i,v in enumerate(av): axes[1].text(v+0.005,i,"{:.3f}".format(v),va="center")
-plt.tight_layout(); plt.savefig(VIZ+"/08_model_comparison.png",bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "08_model_comparison.png",bbox_inches="tight"); plt.close()
 print("Saved: 08")
 
 # 9. Probability Distribution
@@ -198,7 +204,7 @@ ax.hist(yp_f[y_test==0],bins=40,alpha=0.6,color="#4CAF50",label="Not Readmitted"
 ax.hist(yp_f[y_test==1],bins=40,alpha=0.6,color="#F44336",label="Readmitted",density=True)
 ax.set_title("Predicted Probability Distribution",fontweight="bold")
 ax.axvline(x=0.5,color="black",linestyle="--"); ax.legend()
-plt.tight_layout(); plt.savefig(VIZ+"/09_probability_distribution.png",bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "09_probability_distribution.png",bbox_inches="tight"); plt.close()
 print("Saved: 09")
 
 # SHAP (always use XGBoost for tree-based explainability)
@@ -207,12 +213,12 @@ explainer = shap.TreeExplainer(shap_model)
 sv = explainer.shap_values(X_test)
 fig=plt.figure(figsize=(12,8)); shap.summary_plot(sv,X_test,show=False,max_display=20)
 plt.title("SHAP Impact on Readmission",fontweight="bold")
-plt.tight_layout(); plt.savefig(VIZ+"/10_shap_summary.png",bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "10_shap_summary.png",bbox_inches="tight"); plt.close()
 print("Saved: 10")
 
 fig=plt.figure(figsize=(10,7)); shap.summary_plot(sv,X_test,plot_type="bar",show=False,max_display=20)
 plt.title("Mean |SHAP| Importance",fontweight="bold")
-plt.tight_layout(); plt.savefig(VIZ+"/11_shap_bar.png",bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "11_shap_bar.png",bbox_inches="tight"); plt.close()
 print("Saved: 11")
 
 imp = pd.DataFrame({"feature":X.columns,"importance":shap_model.feature_importances_}).sort_values("importance",ascending=False)
@@ -235,14 +241,14 @@ axes[0].bar(tco.index,tco.values,color=tc); axes[0].set_title("Patients by Risk 
 tr = rdf.groupby("tier")["actual"].mean().reindex(["Low","Medium","High","Very High"]).fillna(0)*100
 axes[1].bar(tr.index,tr.values,color=tc); axes[1].set_title("Readmission Rate by Tier",fontweight="bold")
 for i,v in enumerate(tr.values): axes[1].text(i,v+0.5,"{:.1f}%".format(v),ha="center",fontweight="bold")
-plt.tight_layout(); plt.savefig(VIZ+"/12_risk_stratification.png",bbox_inches="tight"); plt.close()
+plt.tight_layout(); plt.savefig(VIZ / "12_risk_stratification.png",bbox_inches="tight"); plt.close()
 print("Saved: 12")
 
 summary = {"best_model":bn,"auc":round(results[bn]["auc"],4),"f1":round(results[bn]["f1"],4),
     "recall":round(results[bn]["recall"],4),"precision":round(results[bn]["precision"],4),
     "cv_auc":round(cvs.mean(),4),"readmission_rate":round(df["readmitted"].mean(),4),
     "top_features":imp.head(15)[["feature","importance"]].to_dict("records")}
-json.dump(summary, open(PROJ+"/reports/model_summary.json","w"), indent=2)
+json.dump(summary, open(PROJ / "reports" / "model_summary.json", "w"), indent=2)
 
 print("\n" + "="*70)
 print("  PIPELINE COMPLETE!")

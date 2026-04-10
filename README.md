@@ -1,5 +1,9 @@
 # 🏥 Patient 30-Day Readmission Prediction
 
+![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)
+
 End-to-end classification project predicting hospital readmissions within 30 days of discharge, with class imbalance handling (SMOTE), risk stratification, and SHAP explainability.
 
 ## 📌 Project Overview
@@ -42,10 +46,37 @@ End-to-end classification project predicting hospital readmissions within 30 day
 | High | 74 | 39.2% |
 | Very High | 18 | 44.4% |
 
+## 🚀 Quick Start / Installation
+
+```bash
+git clone https://github.com/Sushma-code-eng/Patient-Readmission-Prediction-.git
+cd Patient-Readmission-Prediction-
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+## ▶️ How to Run
+
+```bash
+python data/generate_data.py
+python notebooks/full_analysis.py
+```
+
+Visualizations are saved to `visualizations/`, model artifacts to `models/`, and the metrics report to `reports/model_summary.json`.
+
+## 📊 Visualizations
+
+![SHAP Summary](visualizations/09_shap_summary.png)
+
+![Model Comparison](visualizations/07_model_comparison.png)
+
+![Risk Stratification](visualizations/11_risk_stratification.png)
+
 ## 📁 Project Structure
 
 ```
-patient-readmission-prediction/
+Patient-Readmission-Prediction-/
 ├── data/
 │   ├── patient_readmission.csv
 │   └── generate_data.py
@@ -68,15 +99,11 @@ patient-readmission-prediction/
 │   └── scaler.pkl
 ├── reports/
 │   └── model_summary.json
-└── README.md
-```
-
-## 🚀 How to Run
-
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost shap imbalanced-learn
-python data/generate_data.py
-python notebooks/full_analysis.py
+├── .gitignore
+├── CONTRIBUTING.md
+├── LICENSE
+├── README.md
+└── requirements.txt
 ```
 
 ## 💡 Key Techniques Demonstrated
@@ -97,3 +124,20 @@ python notebooks/full_analysis.py
 ## 🛠 Tech Stack
 
 Python | Pandas | Scikit-learn | XGBoost | SHAP | imbalanced-learn | Seaborn | Matplotlib
+
+## 🔮 Future Work
+
+- Deploy as Flask/FastAPI REST API for real-time inference
+- Experiment with deep learning approaches (TabNet, transformer-based models)
+- Integration with EHR (Electronic Health Record) systems
+- Add hyperparameter tuning with Optuna or GridSearchCV
+- Explore fairness metrics across demographic groups
+
+## 📄 License
+
+This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.
+
+## 👤 Author
+
+**Sushma** — <a href="https://github.com/Sushma-code-eng">GitHub Profile</a>
+
